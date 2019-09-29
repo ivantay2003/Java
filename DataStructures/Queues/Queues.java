@@ -7,9 +7,13 @@ package DataStructures.Queues;
  * The elements that are added first are the first to be removed.
  * New elements are added to the back/rear of the queue.
  *
- * @author Unknown
  */
 class Queue {
+    /**
+     * Default initial capacity.
+     */
+    private static final int DEFAULT_CAPACITY = 10;
+
     /**
      * Max size of the queue
      */
@@ -30,6 +34,13 @@ class Queue {
      * How many items are in the queue
      */
     private int nItems;
+
+    /**
+     * init with DEFAULT_CAPACITY
+     */
+    public Queue() {
+        this(DEFAULT_CAPACITY);
+    }
 
     /**
      * Constructor
@@ -53,9 +64,8 @@ class Queue {
     public boolean insert(int x) {
         if (isFull())
             return false;
-        if (rear == maxSize - 1) // If the back of the queue is the end of the array wrap around to the front
-            rear = -1;
-        rear++;
+        // If the back of the queue is the end of the array wrap around to the front
+        rear = (rear + 1) % maxSize;
         queueArray[rear] = x;
         nItems++;
         return true;
@@ -66,15 +76,12 @@ class Queue {
      *
      * @return the new front of the queue
      */
-    public int remove() { // Remove an element from the front of the queue
+    public int remove() {
         if (isEmpty()) {
-            System.out.println("Queue is empty");
             return -1;
         }
         int temp = queueArray[front];
-        front++;
-        if (front == maxSize) //Dealing with wrap-around again
-            front = 0;
+        front = (front + 1) % maxSize;
         nItems--;
         return temp;
     }
@@ -103,7 +110,7 @@ class Queue {
      * @return true if the queue is empty
      */
     public boolean isEmpty() {
-        return (nItems == 0);
+        return nItems == 0;
     }
 
     /**
@@ -112,7 +119,7 @@ class Queue {
      * @return true if the queue is full
      */
     public boolean isFull() {
-        return (nItems == maxSize);
+        return nItems == maxSize;
     }
 
     /**
@@ -153,6 +160,6 @@ public class Queues {
         // [7(rear), 2(front), 5, 3]
 
         System.out.println(myQueue.peekFront()); // Will print 2
-        System.out.println(myQueue.peekRear()); // Will print 7 	
+        System.out.println(myQueue.peekRear()); // Will print 7
     }
 }
